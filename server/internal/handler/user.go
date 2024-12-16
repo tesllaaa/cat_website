@@ -98,18 +98,10 @@ func (h *Handler) SignUp(c *fiber.Ctx) error {
 	}
 
 	h.logger.Debug().Msg("call pkg.GenerateRefreshToken")
-	refreshToken, err := pkg.GenerateRefreshToken(user.ID, config.SigningKey)
-	if err != nil {
-		logEvent := log.CreateLog(h.logger, log.LogsField{Level: "Error", Method: c.Method(),
-			Url: c.OriginalURL(), Status: fiber.StatusInternalServerError})
-		logEvent.Msg(err.Error())
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
-	}
 
 	res := &entities.CreateUserResponse{
-		ID:           r.ID,
-		AccessToken:  accessToken,
-		RefreshToken: refreshToken,
+		ID:          r.ID,
+		AccessToken: accessToken,
 	}
 
 	logEvent := log.CreateLog(h.logger, log.LogsField{Level: "Info", Method: c.Method(),
@@ -174,18 +166,10 @@ func (h *Handler) Login(c *fiber.Ctx) error {
 	}
 
 	h.logger.Debug().Msg("call pkg.GenerateRefreshToken")
-	refreshToken, err := pkg.GenerateRefreshToken(u.ID, config.SigningKey)
-	if err != nil {
-		logEvent := log.CreateLog(h.logger, log.LogsField{Level: "Error", Method: c.Method(),
-			Url: c.OriginalURL(), Status: fiber.StatusInternalServerError})
-		logEvent.Msg(err.Error())
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
-	}
 
 	res := entities.LoginUserResponse{
-		AccessToken:  accessToken,
-		RefreshToken: refreshToken,
-		ID:           u.ID,
+		AccessToken: accessToken,
+		ID:          u.ID,
 	}
 
 	logEvent := log.CreateLog(h.logger, log.LogsField{Level: "Info", Method: c.Method(),
