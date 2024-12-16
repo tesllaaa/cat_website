@@ -1,7 +1,7 @@
 {
     "swagger": "2.0",
     "info": {
-        "title": "Σigma API",
+        "title": "Kotiki API",
         "contact": {},
         "version": "1.0"
     },
