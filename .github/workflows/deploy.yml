@@ -1,1 +1,48 @@
+name: Deploy to Server
 
+on:
+  push:
+    branches:
+      - main 
+
+jobs:
+  deploy:
+    name: Deploy Application
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v3
+
+    - name: Set up SSH
+      uses: webfactory/ssh-agent@v0.5.3
+      with:
+        ssh-private-key: ${{ secrets.NODE1_SSH_PRIVATE_KEY }}
+
+    - name: Deploy to Server
+      run: |
+        ssh -o StrictHostKeyChecking=no -p ${{ vars.NODE1_SSH_PORT }} ${{ vars.NODE1_SSH_USER }}@${{ secrets.NODE1_SERVER_IP }} << 'EOF'
+          set -e  # Остановка выполнения на ошибке
+
+          cd ${{ vars.NODE1_PROJECT_PATH }}
+
+          git stash || true  # Если нечего сохранять, игнорируем ошибку
+          git pull origin main
+
+          echo "Backing up current state of containers..."
+          docker compose config > backup-docker-compose.yml || true
+
+          echo "Starting deployment..."
+          if ! docker compose up -d --build; then
+            echo "Deployment failed. Restoring previous state..."
+            if [ -f backup-docker-compose.yml ]; then
+              docker compose -f backup-docker-compose.yml up -d
+              echo "Previous state restored."
+            else
+              echo "No backup available to restore."
+            fi
+            exit 1 
+          fi
+
+          docker image prune -f
+        EOF
