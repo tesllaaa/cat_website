@@ -1,0 +1,106 @@
+networks:
+  dev:
+    name: "dev"
+    driver: "bridge"
+
+
+services:
+  postgres:
+    container_name: "postgres"
+    image: postgres:16.3-alpine
+    command:
+      - "postgres"
+      - "-c"
+      - "max_connections=200" # Позволяет до 200 соединений, достаточно для большинства приложений
+      - "-c"
+      - "shared_buffers=4GB" # 25% от доступной ОЗУ
+      - "-c"
+      - "effective_cache_size=12GB" # 75% от доступной ОЗУ
+      - "-c"
+      - "work_mem=32MB" # Память для сортировки на каждое соединение
+      - "-c"
+      - "maintenance_work_mem=1GB" # Память для операций VACUUM/CREATE INDEX
+      - "-c"
+      - "checkpoint_completion_target=0.9" # Уменьшает нагрузку на диски во время checkpoint
+      - "-c"
+      - "wal_buffers=16MB" # Размер буферов WAL
+      - "-c"
+      - "default_statistics_target=100" # Улучшает точность статистики для планирования запросов
+      - "-c"
+      - "random_page_cost=1.1" # Оптимизировано для SSD
+      - "-c"
+      - "temp_file_limit=10GB" # Лимит для временных файлов
+      - "-c"
+      - "log_min_duration_statement=200ms" # Логировать запросы, выполняющиеся более 200 мс
+      - "-c"
+      - "lock_timeout=1s" # Ограничение времени ожидания блокировок
+      - "-c"
+      - "statement_timeout=60s" # Ограничение времени выполнения запросов
+      - "-c"
+      - "autovacuum=on" # Включить автоматическое обслуживание
+      - "-c"
+      - "autovacuum_vacuum_scale_factor=0.05" # Более агрессивный автовакиум
+      - "-c"
+      - "autovacuum_analyze_scale_factor=0.02" # Улучшает актуальность статистики
+      - "-c"
+      - "autovacuum_max_workers=4" # Использовать до 4 потоков на автовакиум
+      - "-c"
+      - "autovacuum_naptime=10s" # Проверять таблицы каждые 10 секунд
+      - "-c"
+      - "shared_preload_libraries=pg_stat_statements"
+      - "-c"
+      - "pg_stat_statements.max=10000"
+      - "-c"
+      - "pg_stat_statements.track=all"
+    environment:
+      POSTGRES_DB: "kotiki"
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "12345678"
+
+    volumes:
+      - ./.data/postgres/postgresql:/var/lib/postgresql/
+    ports:
+      - "127.0.0.1:5432:5432"
+    healthcheck:
+      test:
+        [ "CMD-SHELL", "pg_isready -U postgres -d kotiki -h 127.0.0.1 -p 5432" ]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+    restart: unless-stopped
+    networks:
+      - dev
+
+  backend:
+    container_name: backend
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    restart: on-failure
+    ports:
+      - "127.0.0.1:8080:8080"
+    healthcheck:
+      test: [ "CMD", "curl", "localhost:8080/health" ]
+      interval: 60s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    volumes:
+      - ./.tmp:/.tmp
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - dev
+
+  frontend:
+    container_name: frontend
+    build:
+      context: web
+      dockerfile: Dockerfile
+    depends_on:
+      - backend
+
+    ports:
+      - "3000:3000"
