@@ -114,7 +114,7 @@ services:
       context: web
       dockerfile: Dockerfile
     depends_on:
-      - backends
+      - backend
     ports:
       - "3000:3000"
     networks:
