@@ -1,0 +1,73 @@
+apiVersion: 1
+groups:
+  - orgId: 1
+    name: 1m-evaluation
+    folder: tg
+    interval: 1m
+    rules:
+      - uid: be2gmid1ripdsd
+        title: tg-log-fatal
+        condition: C
+        for: 0s
+        data:
+          - refId: A
+            queryType: instant
+            relativeTimeRange:
+              from: 600
+              to: 0
+            datasourceUid: P8E80F9AEF21F6940
+            model:
+              editorMode: code
+              expr: count_over_time({filename="/var/log/app/iqj.log"} |= "Fatal" [1m])
+              intervalMs: 1000
+              maxDataPoints: 43200
+              queryType: instant
+              refId: A
+          - refId: C
+            datasourceUid: __expr__
+            model:
+              conditions:
+                - evaluator:
+                    params:
+                      - 0
+                    type: gt
+                  operator:
+                    type: and
+                  query:
+                    params:
+                      - A
+                  reducer:
+                    params: []
+                    type: last
+                  type: query
+              datasource:
+                type: __expr__
+                uid: __expr__
+              expression: A
+              intervalMs: 1000
+              maxDataPoints: 43200
+              refId: C
+              type: threshold
+        execErrState: Error
+        noDataState: OK
+        annotations:
+          summary: Произошло что-то ужасное. Бегом спасать приложение!!!!!!!!!
+        labels:
+          filename: /var/log/app/iqj.log
+        isPaused: false
+        notification_settings:
+          receiver: Telegram
+
+contactPoints:
+  - orgId: 1
+    name: Telegram
+    receivers:
+      - uid: fe29jo6qbv5dte
+        type: telegram
+        settings:
+          bottoken: ${TG_BOT_TOKEN}
+          chatid: ${TG_CHAT_ID}
+          disable_notification: false
+          disable_web_page_preview: false
+          protect_content: false
+        disableResolveMessage: false

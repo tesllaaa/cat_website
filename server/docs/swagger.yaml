@@ -1,0 +1,192 @@
+basePath: /
+definitions:
+  entities.CreateUserRequest:
+    properties:
+      email:
+        type: string
+      full_name:
+        type: string
+      password:
+        type: string
+    type: object
+  entities.CreateUserResponse:
+    properties:
+      access_token:
+        type: string
+      id:
+        type: integer
+      refresh_token:
+        type: string
+    type: object
+  entities.ErrorResponse:
+    properties:
+      error:
+        type: string
+    type: object
+  entities.LoginUserRequest:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    type: object
+  entities.LoginUserResponse:
+    properties:
+      access_token:
+        type: string
+      id:
+        type: integer
+      refresh_token:
+        type: string
+    type: object
+  entities.UserData:
+    properties:
+      email:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      surname:
+        type: string
+      third_name:
+        type: string
+    type: object
+info:
+  contact: {}
+  title: Σigma API
+  version: "1.0"
+paths:
+  /login:
+    get:
+      consumes:
+      - application/json
+      description: Validates the JWT token from the Authorization header, extracts
+        user ID, and generates a new access token.
+      parameters:
+      - description: Bearer JWT token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: New access token and user ID
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Missing auth token
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: Invalid auth header or token
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Authorization check
+      tags:
+      - user
+    post:
+      consumes:
+      - application/json
+      description: Authenticates a user and returns access and refresh tokens.
+      parameters:
+      - description: User  login credentials
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/entities.LoginUserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: User  successfully logged in
+          schema:
+            $ref: '#/definitions/entities.LoginUserResponse'
+        "400":
+          description: Invalid email or password
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      summary: User login
+      tags:
+      - user
+  /signup:
+    post:
+      consumes:
+      - application/json
+      description: Registers a new user and returns access and refresh tokens.
+      parameters:
+      - description: User  signup information
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/entities.CreateUserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: User  successfully registered
+          schema:
+            $ref: '#/definitions/entities.CreateUserResponse'
+        "400":
+          description: User  already exists or invalid request payload
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      summary: User signup
+      tags:
+      - user
+  /user/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Fetches user details from the database using the provided user
+        ID.
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: User data retrieved successfully
+          schema:
+            $ref: '#/definitions/entities.UserData'
+        "400":
+          description: Invalid user ID format
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      summary: Retrieve user data by ID
+      tags:
+      - user
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
