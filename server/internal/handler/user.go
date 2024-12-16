@@ -14,14 +14,14 @@ import (
 
 // SignUp
 // @Tags         user
-// @Summary      User signup
-// @Description  Registers a new user and returns access and refresh tokens.
+// @Summary      Регистрация пользователя
+// @Description  Создает нового пользователя и выдает ему токен доступа
 // @Accept       json
 // @Produce      json
-// @Param        data body entities.CreateUserRequest true "User  signup information"
-// @Success      200 {object} entities.CreateUserResponse "User  successfully registered"
-// @Failure      400 {object} entities.ErrorResponse "User  already exists or invalid request payload"
-// @Failure      500 {object} entities.ErrorResponse "Internal server error"
+// @Param        data body entities.CreateUserRequest true "User  Данные для регистрации"
+// @Success      200 {object} entities.CreateUserResponse "User  Регистрация успешна"
+// @Failure      400 {object} entities.ErrorResponse "User  Пользователь уже существует или данные неверны"
+// @Failure      500 {object} entities.ErrorResponse "Внутренняя ошибка сервера"
 // @Router       /signup [post]
 func (h *Handler) SignUp(c *fiber.Ctx) error {
 	var u entities.CreateUserRequest

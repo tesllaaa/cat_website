@@ -115,7 +115,7 @@ const docTemplate = `{
         },
         "/signup": {
             "post": {
-                "description": "Registers a new user and returns access and refresh tokens.",
+                "description": "Создает нового пользователя и выдает ему токен доступа",
                 "consumes": [
                     "application/json"
                 ],
@@ -125,10 +125,10 @@ const docTemplate = `{
                 "tags": [
                     "user"
                 ],
-                "summary": "User signup",
+                "summary": "Регистрация пользователя",
                 "parameters": [
                     {
-                        "description": "User  signup information",
+                        "description": "User  Данные для регистрации",
                         "name": "data",
                         "in": "body",
                         "required": true,
@@ -139,19 +139,19 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "User  successfully registered",
+                        "description": "User  Регистрация успешна",
                         "schema": {
                             "$ref": "#/definitions/entities.CreateUserResponse"
                         }
                     },
                     "400": {
-                        "description": "User  already exists or invalid request payload",
+                        "description": "User  Пользователь уже существует или данные неверны",
                         "schema": {
                             "$ref": "#/definitions/entities.ErrorResponse"
                         }
                     },
                     "500": {
-                        "description": "Internal server error",
+                        "description": "Внутренняя ошибка сервера",
                         "schema": {
                             "$ref": "#/definitions/entities.ErrorResponse"
                         }
@@ -209,13 +209,16 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "email": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "petrov@mail.ru"
                 },
                 "full_name": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "Петров Петр Иванович"
                 },
                 "password": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "12345678"
                 }
             }
         },
@@ -227,9 +230,6 @@ const docTemplate = `{
                 },
                 "id": {
                     "type": "integer"
-                },
-                "refresh_token": {
-                    "type": "string"
                 }
             }
         },
@@ -245,10 +245,12 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "email": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "petrov@mail.ru"
                 },
                 "password": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "12345678"
                 }
             }
         },
@@ -260,9 +262,6 @@ const docTemplate = `{
                 },
                 "id": {
                     "type": "integer"
-                },
-                "refresh_token": {
-                    "type": "string"
                 }
             }
         },

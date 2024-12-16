@@ -21,27 +21,25 @@ type UserData struct {
 
 // CreateUserRequest структура запроса на создание пользователя
 type CreateUserRequest struct {
-	Password string `json:"password"`
-	Email    string `json:"email"`
-	FullName string `json:"full_name"`
+	Password string `json:"password" example:"12345678"`
+	Email    string `json:"email" example:"petrov@mail.ru"`
+	FullName string `json:"full_name" example:"Петров Петр Иванович"`
 }
 
 // CreateUserResponse структура ответа на создание пользователя
 type CreateUserResponse struct {
-	AccessToken  string `json:"access_token"`
-	RefreshToken string `json:"refresh_token"`
-	ID           int    `json:"id"`
+	AccessToken string `json:"access_token"`
+	ID          int    `json:"id"`
 }
 
 // LoginUserRequest структура запроса на вход
 type LoginUserRequest struct {
-	Email    string `json:"email"`
-	Password string `json:"password"`
+	Email    string `json:"email" example:"petrov@mail.ru"`
+	Password string `json:"password" example:"12345678"`
 }
 
 // LoginUserResponse структура ответа на вход
 type LoginUserResponse struct {
-	AccessToken  string `json:"access_token"`
-	RefreshToken string `json:"refresh_token"`
-	ID           int    `json:"id"`
+	AccessToken string `json:"access_token"`
+	ID          int    `json:"id"`
 }

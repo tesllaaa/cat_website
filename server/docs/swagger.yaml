@@ -3,10 +3,13 @@ definitions:
   entities.CreateUserRequest:
     properties:
       email:
+        example: petrov@mail.ru
         type: string
       full_name:
+        example: Петров Петр Иванович
         type: string
       password:
+        example: "12345678"
         type: string
     type: object
   entities.CreateUserResponse:
@@ -15,8 +18,6 @@ definitions:
         type: string
       id:
         type: integer
-      refresh_token:
-        type: string
     type: object
   entities.ErrorResponse:
     properties:
@@ -26,8 +27,10 @@ definitions:
   entities.LoginUserRequest:
     properties:
       email:
+        example: petrov@mail.ru
         type: string
       password:
+        example: "12345678"
         type: string
     type: object
   entities.LoginUserResponse:
@@ -36,8 +39,6 @@ definitions:
         type: string
       id:
         type: integer
-      refresh_token:
-        type: string
     type: object
   entities.UserData:
     properties:
@@ -128,9 +129,9 @@ paths:
     post:
       consumes:
       - application/json
-      description: Registers a new user and returns access and refresh tokens.
+      description: Создает нового пользователя и выдает ему токен доступа
       parameters:
-      - description: User  signup information
+      - description: User  Данные для регистрации
         in: body
         name: data
         required: true
@@ -140,18 +141,18 @@ paths:
       - application/json
       responses:
         "200":
-          description: User  successfully registered
+          description: User  Регистрация успешна
           schema:
             $ref: '#/definitions/entities.CreateUserResponse'
         "400":
-          description: User  already exists or invalid request payload
+          description: User  Пользователь уже существует или данные неверны
           schema:
             $ref: '#/definitions/entities.ErrorResponse'
         "500":
-          description: Internal server error
+          description: Внутренняя ошибка сервера
           schema:
             $ref: '#/definitions/entities.ErrorResponse'
-      summary: User signup
+      summary: Регистрация пользователя
       tags:
       - user
   /user/{id}:
