@@ -11,7 +11,7 @@ import (
 
 // @title Kotiki API
 // @version 1.0
-// @BasePath /
+// @BasePath /api
 // @securityDefinitions.apikey ApiKeyAuth
 // @in header
 // @name Authorization
