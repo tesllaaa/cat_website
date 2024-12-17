@@ -50,7 +50,7 @@ func (h *Handler) CatCreate(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "failed to save file"})
 	}
 
-	var cat entities.CreateCatRequest
+	var cat entities.Cat
 
 	careComp, err := strconv.Atoi(c.FormValue("care_complexity"))
 	if err != nil {
@@ -64,7 +64,7 @@ func (h *Handler) CatCreate(c *fiber.Ctx) error {
 	cat.Breed = c.FormValue("breed")
 	cat.CareComplexity = careComp
 	cat.Temper = c.FormValue("temper")
-	cat.Image = savePath
+	cat.ImagePath = savePath
 
 	h.logger.Debug().Msg("call postgres.DBCatExistsBreed")
 	exists, err := postgres.DBCatExistsBreed(h.db, cat.Breed)
