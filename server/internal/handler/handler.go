@@ -52,6 +52,10 @@ func (h *Handler) Router() *fiber.App {
 	f.Get("/user/:id", h.GetUserDataByID)
 
 	f.Post("/cat", h.CatCreate)
+	f.Put("/cat", h.CatUpdate)
+	f.Delete("/cat/id/:id", h.CatDelete)
+	f.Get("/cat/id/:id", h.CatGetByID)
+	f.Get("/cat", h.CatGetAll)
 
 	// Ручки доступные после авторизации пользователя
 	authGroup := f.Group("/auth")

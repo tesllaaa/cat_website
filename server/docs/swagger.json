@@ -8,6 +8,36 @@
     "basePath": "/api",
     "paths": {
         "/cat": {
+            "get": {
+                "description": "Получение всех записей о кошках из базы данных с логированием ошибок",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "cat"
+                ],
+                "summary": "Получение списка всех кошек",
+                "responses": {
+                    "200": {
+                        "description": "Успешное получение списка кошек",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/entities.Cat"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Внутренняя ошибка сервера",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    }
+                }
+            },
             "post": {
                 "description": "Добавление новой записи о кошке в базу данных с логированием ошибок",
                 "consumes": [
@@ -17,7 +47,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "cats"
+                    "cat"
                 ],
                 "summary": "Создание записи о кошке",
                 "parameters": [
@@ -66,6 +96,151 @@
                     },
                     "400": {
                         "description": "Некорректные данные",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Внутренняя ошибка сервера",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/cat/id/{id}": {
+            "get": {
+                "description": "Получение данных о конкретной кошке из базы данных по её идентификатору с логированием ошибок",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "cat"
+                ],
+                "summary": "Получение информации о кошке по ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID кошки для поиска",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Успешное получение данных о кошке",
+                        "schema": {
+                            "$ref": "#/definitions/entities.Cat"
+                        }
+                    },
+                    "400": {
+                        "description": "Некорректный идентификатор",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Внутренняя ошибка сервера",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/cat/{id}": {
+            "put": {
+                "description": "Обновление существующей записи о кошке в базе данных с логированием ошибок",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "cat"
+                ],
+                "summary": "Обновление записи о кошке",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID кошки",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Данные для обновления кошки",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/entities.UpdateCatRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Успешное обновление записи",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Некорректные данные",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Внутренняя ошибка сервера",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Удаление записи о кошке из базы данных по её идентификатору с логированием ошибок",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "cat"
+                ],
+                "summary": "Удаление записи о кошке",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID кошки для удаления",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Успешное удаление записи",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Некорректный идентификатор",
                         "schema": {
                             "$ref": "#/definitions/entities.ErrorResponse"
                         }
@@ -311,6 +486,31 @@
                 "id": {
                     "type": "integer",
                     "example": 1
+                }
+            }
+        },
+        "entities.UpdateCatRequest": {
+            "type": "object",
+            "properties": {
+                "breed": {
+                    "type": "string",
+                    "example": "Мейн-кун"
+                },
+                "care_complexity": {
+                    "type": "integer",
+                    "example": 4
+                },
+                "fur": {
+                    "type": "string",
+                    "example": "Длинношерстная"
+                },
+                "id": {
+                    "type": "integer",
+                    "example": 7
+                },
+                "temper": {
+                    "type": "string",
+                    "example": "Спокойный"
                 }
             }
         },

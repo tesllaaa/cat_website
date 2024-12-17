@@ -68,6 +68,24 @@ definitions:
         example: 1
         type: integer
     type: object
+  entities.UpdateCatRequest:
+    properties:
+      breed:
+        example: Мейн-кун
+        type: string
+      care_complexity:
+        example: 4
+        type: integer
+      fur:
+        example: Длинношерстная
+        type: string
+      id:
+        example: 7
+        type: integer
+      temper:
+        example: Спокойный
+        type: string
+    type: object
   entities.UserData:
     properties:
       email:
@@ -89,6 +107,26 @@ info:
   version: "1.0"
 paths:
   /cat:
+    get:
+      consumes:
+      - application/json
+      description: Получение всех записей о кошках из базы данных с логированием ошибок
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Успешное получение списка кошек
+          schema:
+            items:
+              $ref: '#/definitions/entities.Cat'
+            type: array
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      summary: Получение списка всех кошек
+      tags:
+      - cat
     post:
       consumes:
       - multipart/form-data
@@ -136,7 +174,106 @@ paths:
             $ref: '#/definitions/entities.ErrorResponse'
       summary: Создание записи о кошке
       tags:
-      - cats
+      - cat
+  /cat/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Удаление записи о кошке из базы данных по её идентификатору с логированием
+        ошибок
+      parameters:
+      - description: ID кошки для удаления
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Успешное удаление записи
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Некорректный идентификатор
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      summary: Удаление записи о кошке
+      tags:
+      - cat
+    put:
+      consumes:
+      - application/json
+      description: Обновление существующей записи о кошке в базе данных с логированием
+        ошибок
+      parameters:
+      - description: ID кошки
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Данные для обновления кошки
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/entities.UpdateCatRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Успешное обновление записи
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Некорректные данные
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      summary: Обновление записи о кошке
+      tags:
+      - cat
+  /cat/id/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Получение данных о конкретной кошке из базы данных по её идентификатору
+        с логированием ошибок
+      parameters:
+      - description: ID кошки для поиска
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Успешное получение данных о кошке
+          schema:
+            $ref: '#/definitions/entities.Cat'
+        "400":
+          description: Некорректный идентификатор
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      summary: Получение информации о кошке по ID
+      tags:
+      - cat
   /login:
     post:
       consumes:
