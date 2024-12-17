@@ -15,7 +15,7 @@ func DBCatCreate(db *sqlx.DB, cat *entities.Cat) (*entities.Cat, error) {
 
 	stmt, err := db.PrepareNamed(query)
 	if stmt == nil {
-		return nil, errors.New("error preparing statement")
+		return nil, err
 	}
 	err = stmt.Get(&cat.ID, cat)
 	if err != nil {
