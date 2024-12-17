@@ -5,11 +5,11 @@ import (
 	"server/internal/entities"
 )
 
-func DBGetFavoriteCats(db *sqlx.DB, userID int) (*[]entities.Cat, error) {
-	favorites := []entities.Cat{}
+func DBGetFavoriteCats(db *sqlx.DB, userID int) (*[]entities.FavoriteCat, error) {
+	var favorites []entities.FavoriteCat
 
 	query := `
-	SELECT cats.id AS cat_id, cats.breed, cats.image_path FROM favorites
+	SELECT cats.id, cats.breed, cats.image_path FROM favorites
 	JOIN cats ON favorites.cat_id = cats.id
 	WHERE favorites.user_id = $1;`
 
