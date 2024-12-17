@@ -103,9 +103,6 @@ definitions:
       cat_id:
         example: 3
         type: integer
-      user_id:
-        example: 5
-        type: integer
     type: object
   entities.UserData:
     properties:
@@ -167,12 +164,6 @@ paths:
       - application/json
       description: Получение списка кошек, которые являются любимыми у пользователя
         по его идентификатору с логированием ошибок
-      parameters:
-      - description: ID пользователя
-        in: path
-        name: id
-        required: true
-        type: integer
       produces:
       - application/json
       responses:

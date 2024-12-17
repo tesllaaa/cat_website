@@ -7,6 +7,5 @@ type Favorite struct {
 }
 
 type UpdateFavoriteRequest struct {
-	UserID int `json:"user_id" db:"user_id" example:"5"`
-	CatID  int `json:"cat_id" db:"cat_id" example:"3"`
+	CatID int `json:"cat_id" db:"cat_id" example:"3"`
 }

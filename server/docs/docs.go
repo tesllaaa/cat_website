@@ -33,15 +33,6 @@ const docTemplate = `{
                     "cat"
                 ],
                 "summary": "Получение списка любимых кошек пользователя",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "ID пользователя",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
                 "responses": {
                     "200": {
                         "description": "Успешное получение списка любимых кошек",
@@ -689,10 +680,6 @@ const docTemplate = `{
                 "cat_id": {
                     "type": "integer",
                     "example": 3
-                },
-                "user_id": {
-                    "type": "integer",
-                    "example": 5
                 }
             }
         },

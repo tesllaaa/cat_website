@@ -13,7 +13,6 @@ import (
 // @Description  Получение списка кошек, которые являются любимыми у пользователя по его идентификатору с логированием ошибок
 // @Accept       json
 // @Produce      json
-// @Param        id   path      int  true  "ID пользователя"
 // @Success      200  {array}   entities.Cat "Успешное получение списка любимых кошек"
 // @Failure      400  {object}  entities.ErrorResponse "Некорректный идентификатор пользователя"
 // @Failure      500  {object}  entities.ErrorResponse "Внутренняя ошибка сервера"
@@ -25,7 +24,7 @@ func (h *Handler) GetFavoriteCats(c *fiber.Ctx) error {
 		return c.SendStatus(fiber.StatusForbidden)
 	}
 
-	h.logger.Debug().Msg("call postgres.DBFormulaExists")
+	h.logger.Debug().Msg("call postgres.DBGetFavoriteCats")
 	cats, err := postgres.DBGetFavoriteCats(h.db, int(id))
 	if err != nil {
 		logEvent := log.CreateLog(h.logger, log.LogsField{Level: "Error", Method: c.Method(),
@@ -53,6 +52,11 @@ func (h *Handler) GetFavoriteCats(c *fiber.Ctx) error {
 // @Router       /auth/favorites [post]
 // @Security ApiKeyAuth
 func (h *Handler) AddFavoriteCat(c *fiber.Ctx) error {
+	id, ok := c.Locals("id").(int)
+	if !ok {
+		return c.SendStatus(fiber.StatusForbidden)
+	}
+
 	var req entities.UpdateFavoriteRequest
 	if err := c.BodyParser(&req); err != nil {
 		logEvent := log.CreateLog(h.logger, log.LogsField{Level: "Error", Method: c.Method(),
@@ -62,7 +66,7 @@ func (h *Handler) AddFavoriteCat(c *fiber.Ctx) error {
 	}
 
 	favorite := &entities.Favorite{
-		UserID: req.UserID,
+		UserID: id,
 		CatID:  req.CatID,
 	}
 	h.logger.Debug().Msg("call postgres.AddFavoriteCat")
@@ -92,6 +96,11 @@ func (h *Handler) AddFavoriteCat(c *fiber.Ctx) error {
 // @Router       /auth/favorites [delete]
 // @Security ApiKeyAuth
 func (h *Handler) DeleteFavoriteCat(c *fiber.Ctx) error {
+	id, ok := c.Locals("id").(int)
+	if !ok {
+		return c.SendStatus(fiber.StatusForbidden)
+	}
+
 	var req entities.UpdateFavoriteRequest
 	if err := c.BodyParser(&req); err != nil {
 		logEvent := log.CreateLog(h.logger, log.LogsField{Level: "Error", Method: c.Method(),
@@ -101,7 +110,7 @@ func (h *Handler) DeleteFavoriteCat(c *fiber.Ctx) error {
 	}
 
 	favorite := &entities.Favorite{
-		UserID: req.UserID,
+		UserID: id,
 		CatID:  req.CatID,
 	}
 	h.logger.Debug().Msg("call postgres.DBRemoveFavoriteCat")
