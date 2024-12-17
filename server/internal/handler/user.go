@@ -18,9 +18,9 @@ import (
 // @Description  Создает нового пользователя и выдает ему токен доступа
 // @Accept       json
 // @Produce      json
-// @Param        data body entities.CreateUserRequest true "User  Данные для регистрации"
-// @Success      200 {object} entities.CreateUserResponse "User  Регистрация успешна"
-// @Failure      400 {object} entities.ErrorResponse "User  Пользователь уже существует или данные неверны"
+// @Param        data body entities.CreateUserRequest true "Данные для регистрации"
+// @Success      200 {object} entities.CreateUserResponse "Регистрация успешна"
+// @Failure      400 {object} entities.ErrorResponse "Пользователь уже существует или данные неверны"
 // @Failure      500 {object} entities.ErrorResponse "Внутренняя ошибка сервера"
 // @Router       /signup [post]
 func (h *Handler) SignUp(c *fiber.Ctx) error {
