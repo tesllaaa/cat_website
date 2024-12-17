@@ -16,60 +16,8 @@ const docTemplate = `{
     "basePath": "{{.BasePath}}",
     "paths": {
         "/login": {
-            "get": {
-                "description": "Validates the JWT token from the Authorization header, extracts user ID, and generates a new access token.",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "user"
-                ],
-                "summary": "Authorization check",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Bearer JWT token",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "New access token and user ID",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": true
-                        }
-                    },
-                    "400": {
-                        "description": "Missing auth token",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": true
-                        }
-                    },
-                    "401": {
-                        "description": "Invalid auth header or token",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": true
-                        }
-                    },
-                    "500": {
-                        "description": "Internal server error",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": true
-                        }
-                    }
-                }
-            },
             "post": {
-                "description": "Authenticates a user and returns access and refresh tokens.",
+                "description": "Аутентификация пользователя с возвращением токена доступа",
                 "consumes": [
                     "application/json"
                 ],
@@ -79,10 +27,10 @@ const docTemplate = `{
                 "tags": [
                     "user"
                 ],
-                "summary": "User login",
+                "summary": "Вход пользователя",
                 "parameters": [
                     {
-                        "description": "User  login credentials",
+                        "description": "Данные пользоватея",
                         "name": "data",
                         "in": "body",
                         "required": true,
@@ -93,19 +41,19 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "User  successfully logged in",
+                        "description": "Успешный вход",
                         "schema": {
                             "$ref": "#/definitions/entities.LoginUserResponse"
                         }
                     },
                     "400": {
-                        "description": "Invalid email or password",
+                        "description": "Неверный логин или пароль",
                         "schema": {
                             "$ref": "#/definitions/entities.ErrorResponse"
                         }
                     },
                     "500": {
-                        "description": "Internal server error",
+                        "description": "Внутренняя ошибка сервера",
                         "schema": {
                             "$ref": "#/definitions/entities.ErrorResponse"
                         }
@@ -161,7 +109,7 @@ const docTemplate = `{
         },
         "/user/{id}": {
             "get": {
-                "description": "Fetches user details from the database using the provided user ID.",
+                "description": "Извлекает пользовательские данные из БД по ID пользователя",
                 "consumes": [
                     "application/json"
                 ],
@@ -171,11 +119,11 @@ const docTemplate = `{
                 "tags": [
                     "user"
                 ],
-                "summary": "Retrieve user data by ID",
+                "summary": "Получение данных пользователя по его ID",
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "User ID",
+                        "description": "ID пользователя",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -183,19 +131,19 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "User data retrieved successfully",
+                        "description": "Пользовательские данные получены",
                         "schema": {
                             "$ref": "#/definitions/entities.UserData"
                         }
                     },
                     "400": {
-                        "description": "Invalid user ID format",
+                        "description": "Неверный формат ID",
                         "schema": {
                             "$ref": "#/definitions/entities.ErrorResponse"
                         }
                     },
                     "500": {
-                        "description": "Internal server error",
+                        "description": "Внутренняя ошибка сервера",
                         "schema": {
                             "$ref": "#/definitions/entities.ErrorResponse"
                         }
@@ -226,10 +174,12 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "access_token": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJNYXBDbGFpbXMiOnsiRXhwaXJlc0F0IjoxNzM4MDE3MjA5LCJJc3N1ZWRBciI6MTczNDQxNzIwOX0sInVzZXJfaWQiOjF9.CX2eHEjXZa209vDdtdoz40JlbxuHukMjrc-hw2E_Jy0"
                 },
                 "id": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 1
                 }
             }
         },
@@ -258,10 +208,12 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "access_token": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJNYXBDbGFpbXMiOnsiRXhwaXJlc0F0IjoxNzM4MDE3MjA5LCJJc3N1ZWRBciI6MTczNDQxNzIwOX0sInVzZXJfaWQiOjF9.CX2eHEjXZa209vDdtdoz40JlbxuHukMjrc-hw2E_Jy0"
                 },
                 "id": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 1
                 }
             }
         },
@@ -269,19 +221,24 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "email": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "petrov@mail.ru"
                 },
                 "id": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 1
                 },
                 "name": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "Петр"
                 },
                 "surname": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "Петров"
                 },
                 "third_name": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "Петрович"
                 }
             }
         }

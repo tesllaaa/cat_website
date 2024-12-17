@@ -15,8 +15,10 @@ definitions:
   entities.CreateUserResponse:
     properties:
       access_token:
+        example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJNYXBDbGFpbXMiOnsiRXhwaXJlc0F0IjoxNzM4MDE3MjA5LCJJc3N1ZWRBciI6MTczNDQxNzIwOX0sInVzZXJfaWQiOjF9.CX2eHEjXZa209vDdtdoz40JlbxuHukMjrc-hw2E_Jy0
         type: string
       id:
+        example: 1
         type: integer
     type: object
   entities.ErrorResponse:
@@ -36,21 +38,28 @@ definitions:
   entities.LoginUserResponse:
     properties:
       access_token:
+        example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJNYXBDbGFpbXMiOnsiRXhwaXJlc0F0IjoxNzM4MDE3MjA5LCJJc3N1ZWRBciI6MTczNDQxNzIwOX0sInVzZXJfaWQiOjF9.CX2eHEjXZa209vDdtdoz40JlbxuHukMjrc-hw2E_Jy0
         type: string
       id:
+        example: 1
         type: integer
     type: object
   entities.UserData:
     properties:
       email:
+        example: petrov@mail.ru
         type: string
       id:
+        example: 1
         type: integer
       name:
+        example: Петр
         type: string
       surname:
+        example: Петров
         type: string
       third_name:
+        example: Петрович
         type: string
     type: object
 info:
@@ -59,49 +68,12 @@ info:
   version: "1.0"
 paths:
   /login:
-    get:
-      consumes:
-      - application/json
-      description: Validates the JWT token from the Authorization header, extracts
-        user ID, and generates a new access token.
-      parameters:
-      - description: Bearer JWT token
-        in: header
-        name: Authorization
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: New access token and user ID
-          schema:
-            additionalProperties: true
-            type: object
-        "400":
-          description: Missing auth token
-          schema:
-            additionalProperties: true
-            type: object
-        "401":
-          description: Invalid auth header or token
-          schema:
-            additionalProperties: true
-            type: object
-        "500":
-          description: Internal server error
-          schema:
-            additionalProperties: true
-            type: object
-      summary: Authorization check
-      tags:
-      - user
     post:
       consumes:
       - application/json
-      description: Authenticates a user and returns access and refresh tokens.
+      description: Аутентификация пользователя с возвращением токена доступа
       parameters:
-      - description: User  login credentials
+      - description: Данные пользоватея
         in: body
         name: data
         required: true
@@ -111,18 +83,18 @@ paths:
       - application/json
       responses:
         "200":
-          description: User  successfully logged in
+          description: Успешный вход
           schema:
             $ref: '#/definitions/entities.LoginUserResponse'
         "400":
-          description: Invalid email or password
+          description: Неверный логин или пароль
           schema:
             $ref: '#/definitions/entities.ErrorResponse'
         "500":
-          description: Internal server error
+          description: Внутренняя ошибка сервера
           schema:
             $ref: '#/definitions/entities.ErrorResponse'
-      summary: User login
+      summary: Вход пользователя
       tags:
       - user
   /signup:
@@ -159,10 +131,9 @@ paths:
     get:
       consumes:
       - application/json
-      description: Fetches user details from the database using the provided user
-        ID.
+      description: Извлекает пользовательские данные из БД по ID пользователя
       parameters:
-      - description: User ID
+      - description: ID пользователя
         in: path
         name: id
         required: true
@@ -171,18 +142,18 @@ paths:
       - application/json
       responses:
         "200":
-          description: User data retrieved successfully
+          description: Пользовательские данные получены
           schema:
             $ref: '#/definitions/entities.UserData'
         "400":
-          description: Invalid user ID format
+          description: Неверный формат ID
           schema:
             $ref: '#/definitions/entities.ErrorResponse'
         "500":
-          description: Internal server error
+          description: Внутренняя ошибка сервера
           schema:
             $ref: '#/definitions/entities.ErrorResponse'
-      summary: Retrieve user data by ID
+      summary: Получение данных пользователя по его ID
       tags:
       - user
 securityDefinitions:

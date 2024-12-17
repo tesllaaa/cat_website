@@ -12,11 +12,11 @@ type User struct {
 
 // UserData базовая структура пользовательских данных
 type UserData struct {
-	ID        int    `json:"id" db:"id"`
-	Email     string `json:"email" db:"email"`
-	Name      string `json:"name" db:"name"`
-	Surname   string `json:"surname" db:"surname"`
-	ThirdName string `json:"third_name" db:"third_name"`
+	ID        int    `json:"id" db:"id" example:"1"`
+	Email     string `json:"email" db:"email" example:"petrov@mail.ru"`
+	Name      string `json:"name" db:"name" example:"Петр"`
+	Surname   string `json:"surname" db:"surname" example:"Петров"`
+	ThirdName string `json:"third_name" db:"third_name" example:"Петрович"`
 }
 
 // CreateUserRequest структура запроса на создание пользователя
@@ -28,8 +28,8 @@ type CreateUserRequest struct {
 
 // CreateUserResponse структура ответа на создание пользователя
 type CreateUserResponse struct {
-	AccessToken string `json:"access_token"`
-	ID          int    `json:"id"`
+	AccessToken string `json:"access_token" example:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJNYXBDbGFpbXMiOnsiRXhwaXJlc0F0IjoxNzM4MDE3MjA5LCJJc3N1ZWRBciI6MTczNDQxNzIwOX0sInVzZXJfaWQiOjF9.CX2eHEjXZa209vDdtdoz40JlbxuHukMjrc-hw2E_Jy0"`
+	ID          int    `json:"id" example:"1"`
 }
 
 // LoginUserRequest структура запроса на вход
@@ -40,6 +40,6 @@ type LoginUserRequest struct {
 
 // LoginUserResponse структура ответа на вход
 type LoginUserResponse struct {
-	AccessToken string `json:"access_token"`
-	ID          int    `json:"id"`
+	AccessToken string `json:"access_token" example:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJNYXBDbGFpbXMiOnsiRXhwaXJlc0F0IjoxNzM4MDE3MjA5LCJJc3N1ZWRBciI6MTczNDQxNzIwOX0sInVzZXJfaWQiOjF9.CX2eHEjXZa209vDdtdoz40JlbxuHukMjrc-hw2E_Jy0"`
+	ID          int    `json:"id" example:"1"`
 }

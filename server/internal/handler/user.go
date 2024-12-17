@@ -113,14 +113,14 @@ func (h *Handler) SignUp(c *fiber.Ctx) error {
 
 // Login
 // @Tags         user
-// @Summary      User login
-// @Description  Authenticates a user and returns access and refresh tokens.
+// @Summary      Вход пользователя
+// @Description  Аутентификация пользователя с возвращением токена доступа
 // @Accept       json
 // @Produce      json
-// @Param        data body entities.LoginUserRequest true "User  login credentials"
-// @Success      200 {object} entities.LoginUserResponse "User  successfully logged in"
-// @Failure      400 {object} entities.ErrorResponse "Invalid email or password"
-// @Failure      500 {object} entities.ErrorResponse "Internal server error"
+// @Param        data body entities.LoginUserRequest true "Данные пользоватея"
+// @Success      200 {object} entities.LoginUserResponse "Успешный вход"
+// @Failure      400 {object} entities.ErrorResponse "Неверный логин или пароль"
+// @Failure      500 {object} entities.ErrorResponse "Внутренняя ошибка сервера"
 // @Router       /login [post]
 func (h *Handler) Login(c *fiber.Ctx) error {
 	var user entities.LoginUserRequest
@@ -180,14 +180,14 @@ func (h *Handler) Login(c *fiber.Ctx) error {
 
 // GetUserDataByID
 // @Tags         user
-// @Summary      Retrieve user data by ID
-// @Description  Fetches user details from the database using the provided user ID.
+// @Summary      Получение данных пользователя по его ID
+// @Description  Извлекает пользовательские данные из БД по ID пользователя
 // @Accept       json
 // @Produce      json
-// @Param        id   path      int  true  "User ID"
-// @Success      200  {object}  entities.UserData  "User data retrieved successfully"
-// @Failure      400  {object}  entities.ErrorResponse  "Invalid user ID format"
-// @Failure      500  {object}  entities.ErrorResponse  "Internal server error"
+// @Param        id   path      int  true  "ID пользователя"
+// @Success      200  {object}  entities.UserData  "Пользовательские данные получены"
+// @Failure      400  {object}  entities.ErrorResponse  "Неверный формат ID"
+// @Failure      500  {object}  entities.ErrorResponse  "Внутренняя ошибка сервера"
 // @Router       /user/{id} [get]
 func (h *Handler) GetUserDataByID(c *fiber.Ctx) error {
 	idStr := c.Params("id")
@@ -227,69 +227,4 @@ func (h *Handler) GetUserDataByID(c *fiber.Ctx) error {
 		Url: c.OriginalURL(), Status: fiber.StatusOK})
 	logEvent.Msg("success")
 	return c.Status(fiber.StatusOK).JSON(user)
-}
-
-// CheckAuth
-// @Tags         user
-// @Summary      Authorization check
-// @Description  Validates the JWT token from the Authorization header, extracts user ID, and generates a new access token.
-// @Accept       json
-// @Produce      json
-// @Param        Authorization header string true "Bearer JWT token"
-// @Success      200 {object} map[string]interface{} "New access token and user ID"
-// @Failure      400 {object} map[string]interface{} "Missing auth token"
-// @Failure      401 {object} map[string]interface{} "Invalid auth header or token"
-// @Failure      500 {object} map[string]interface{} "Internal server error"
-// @Router       /login [get]
-func (h *Handler) CheckAuth(c *fiber.Ctx) error {
-	header := c.Get("Authorization")
-
-	if header == "" {
-		logEvent := log.CreateLog(h.logger, log.LogsField{Level: "Error", Method: c.Method(),
-			Url: c.OriginalURL(), Status: fiber.StatusBadRequest})
-		logEvent.Msg("Missing auth token")
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Missing auth token"})
-	}
-
-	tokenString := strings.Split(header, " ")
-	if len(tokenString) != 2 {
-		logEvent := log.CreateLog(h.logger, log.LogsField{Level: "Error", Method: c.Method(),
-			Url: c.OriginalURL(), Status: fiber.StatusUnauthorized})
-		logEvent.Msg("Invalid auth header")
-		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"error": "Invalid auth header"})
-	}
-
-	token := tokenString[1]
-
-	id, err := pkg.ParseToken(token, config.SigningKey)
-	if err != nil {
-		logEvent := log.CreateLog(h.logger, log.LogsField{Level: "Error", Method: c.Method(),
-			Url: c.OriginalURL(), Status: fiber.StatusUnauthorized})
-		logEvent.Msg(err.Error())
-		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"error": err.Error()})
-	}
-
-	h.logger.Debug().Msg("call postgres.DBUserExistsID")
-	exists, err := postgres.DBUserExistsID(h.db, int64(id))
-	if err != nil {
-		logEvent := log.CreateLog(h.logger, log.LogsField{Level: "Error", Method: c.Method(),
-			Url: c.OriginalURL(), Status: fiber.StatusInternalServerError})
-		logEvent.Msg(err.Error())
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
-	}
-
-	if !exists {
-		logEvent := log.CreateLog(h.logger, log.LogsField{Level: "Error", Method: c.Method(),
-			Url: c.OriginalURL(), Status: fiber.StatusInternalServerError})
-		logEvent.Msg("user not exists")
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "user not exists"})
-	}
-
-	logEvent := log.CreateLog(h.logger, log.LogsField{Level: "Info", Method: c.Method(),
-		Url: c.OriginalURL(), Status: fiber.StatusOK})
-	logEvent.Msg("success")
-	return c.Status(fiber.StatusOK).JSON(fiber.Map{
-		"access_token": token,
-		"id":           id,
-	})
 }

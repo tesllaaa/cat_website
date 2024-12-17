@@ -50,7 +50,6 @@ func (h *Handler) Router() *fiber.App {
 	f.Post("/signup", h.SignUp)
 	f.Post("/login", h.Login)
 	f.Get("/user/:id", h.GetUserDataByID)
-	f.Get("/login", h.CheckAuth)
 
 	// Ручки доступные после авторизации пользователя
 	authGroup := f.Group("/auth")
