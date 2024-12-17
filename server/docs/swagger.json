@@ -7,6 +7,85 @@
     },
     "basePath": "/api",
     "paths": {
+        "/cat": {
+            "post": {
+                "description": "Добавление новой записи о кошке в базу данных с логированием ошибок",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "cats"
+                ],
+                "summary": "Создание записи о кошке",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID кошки",
+                        "name": "id",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Шерсть кошки",
+                        "name": "fur",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Порода кошки",
+                        "name": "breed",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Сложность ухода за кошкой",
+                        "name": "care_complexity",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Темперамент кошки",
+                        "name": "temper",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "file",
+                        "description": "Изображение кошки",
+                        "name": "image",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Успешное создание записи",
+                        "schema": {
+                            "$ref": "#/definitions/entities.Cat"
+                        }
+                    },
+                    "400": {
+                        "description": "Некорректные данные",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Внутренняя ошибка сервера",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/login": {
             "post": {
                 "description": "Аутентификация пользователя с возвращением токена доступа",
@@ -145,6 +224,35 @@
         }
     },
     "definitions": {
+        "entities.Cat": {
+            "type": "object",
+            "properties": {
+                "breed": {
+                    "type": "string",
+                    "example": "Мейн-кун"
+                },
+                "care_complexity": {
+                    "type": "integer",
+                    "example": 4
+                },
+                "fur": {
+                    "type": "string",
+                    "example": "Длинношерстная"
+                },
+                "id": {
+                    "type": "integer",
+                    "example": 7
+                },
+                "image_path": {
+                    "type": "string",
+                    "example": "/images/cat.png"
+                },
+                "temper": {
+                    "type": "string",
+                    "example": "Спокойный"
+                }
+            }
+        },
         "entities.CreateUserRequest": {
             "type": "object",
             "properties": {

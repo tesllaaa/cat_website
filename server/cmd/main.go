@@ -6,6 +6,7 @@ import (
 	"server/internal/handler"
 	logger "server/internal/log"
 	"server/internal/repository/postgres"
+	"server/util"
 	//"server/util"
 )
 
@@ -24,7 +25,7 @@ func main() {
 		log.Fatal().Msg(fmt.Sprintf("could not initialize database connection: %s", err))
 	}
 	// Создание директорий для временных файлов
-	//util.CreateDirectory()
+	util.CreateDirectory()
 	// Инициализация ручек
 	handlers := handler.NewHandler(db, log)
 

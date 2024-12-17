@@ -51,6 +51,8 @@ func (h *Handler) Router() *fiber.App {
 	f.Post("/login", h.Login)
 	f.Get("/user/:id", h.GetUserDataByID)
 
+	f.Post("/cat", h.CatCreate)
+
 	// Ручки доступные после авторизации пользователя
 	authGroup := f.Group("/auth")
 	authGroup.Use(func(c *fiber.Ctx) error {

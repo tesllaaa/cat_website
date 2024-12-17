@@ -1,5 +1,26 @@
 basePath: /api
 definitions:
+  entities.Cat:
+    properties:
+      breed:
+        example: Мейн-кун
+        type: string
+      care_complexity:
+        example: 4
+        type: integer
+      fur:
+        example: Длинношерстная
+        type: string
+      id:
+        example: 7
+        type: integer
+      image_path:
+        example: /images/cat.png
+        type: string
+      temper:
+        example: Спокойный
+        type: string
+    type: object
   entities.CreateUserRequest:
     properties:
       email:
@@ -67,6 +88,60 @@ info:
   title: Kotiki API
   version: "1.0"
 paths:
+  /cat:
+    post:
+      consumes:
+      - multipart/form-data
+      description: Добавление новой записи о кошке в базу данных с логированием ошибок
+      parameters:
+      - description: ID кошки
+        in: formData
+        name: id
+        required: true
+        type: integer
+      - description: Шерсть кошки
+        in: formData
+        name: fur
+        required: true
+        type: string
+      - description: Порода кошки
+        in: formData
+        name: breed
+        required: true
+        type: string
+      - description: Сложность ухода за кошкой
+        in: formData
+        name: care_complexity
+        required: true
+        type: integer
+      - description: Темперамент кошки
+        in: formData
+        name: temper
+        required: true
+        type: string
+      - description: Изображение кошки
+        in: formData
+        name: image
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Успешное создание записи
+          schema:
+            $ref: '#/definitions/entities.Cat'
+        "400":
+          description: Некорректные данные
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      summary: Создание записи о кошке
+      tags:
+      - cats
   /login:
     post:
       consumes:
