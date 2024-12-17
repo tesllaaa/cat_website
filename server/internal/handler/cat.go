@@ -15,7 +15,6 @@ import (
 // @Description  Добавление новой записи о кошке в базу данных с логированием ошибок
 // @Accept       multipart/form-data
 // @Produce      json
-// @Param        id             formData integer true "ID кошки"
 // @Param        fur            formData string true "Шерсть кошки"
 // @Param        breed          formData string true "Порода кошки"
 // @Param        care_complexity formData integer true "Сложность ухода за кошкой"
@@ -51,14 +50,7 @@ func (h *Handler) CatCreate(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "failed to save file"})
 	}
 
-	var cat entities.Cat
-	id, err := strconv.Atoi(c.FormValue("id"))
-	if err != nil {
-		logEvent := log.CreateLog(h.logger, log.LogsField{Level: "Error", Method: c.Method(),
-			Url: c.OriginalURL(), Status: fiber.StatusBadRequest})
-		logEvent.Msg(err.Error())
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
-	}
+	var cat entities.CreateCatRequest
 
 	careComp, err := strconv.Atoi(c.FormValue("care_complexity"))
 	if err != nil {
@@ -68,12 +60,11 @@ func (h *Handler) CatCreate(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
 	}
 
-	cat.ID = id
 	cat.Fur = c.FormValue("fur")
 	cat.Breed = c.FormValue("breed")
 	cat.CareComplexity = careComp
 	cat.Temper = c.FormValue("temper")
-	cat.ImagePath = savePath
+	cat.Image = savePath
 
 	h.logger.Debug().Msg("call postgres.DBCatExistsBreed")
 	exists, err := postgres.DBCatExistsBreed(h.db, cat.Breed)
