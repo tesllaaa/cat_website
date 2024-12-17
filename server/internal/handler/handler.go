@@ -47,6 +47,11 @@ func (h *Handler) Router() *fiber.App {
 		return c.Status(fiber.StatusOK).SendString("healthy")
 	})
 
+	f.Post("/signup", h.SignUp)
+	f.Post("/login", h.Login)
+	f.Get("/user/:id", h.GetUserDataByID)
+	f.Get("/login", h.CheckAuth)
+
 	// Ручки доступные после авторизации пользователя
 	authGroup := f.Group("/auth")
 	authGroup.Use(func(c *fiber.Ctx) error {
