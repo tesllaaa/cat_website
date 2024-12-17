@@ -128,7 +128,7 @@ const docTemplate = `{
                 "summary": "Регистрация пользователя",
                 "parameters": [
                     {
-                        "description": "User  Данные для регистрации",
+                        "description": "Данные для регистрации",
                         "name": "data",
                         "in": "body",
                         "required": true,
@@ -139,13 +139,13 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "User  Регистрация успешна",
+                        "description": "Регистрация успешна",
                         "schema": {
                             "$ref": "#/definitions/entities.CreateUserResponse"
                         }
                     },
                     "400": {
-                        "description": "User  Пользователь уже существует или данные неверны",
+                        "description": "Пользователь уже существует или данные неверны",
                         "schema": {
                             "$ref": "#/definitions/entities.ErrorResponse"
                         }
