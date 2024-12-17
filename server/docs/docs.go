@@ -39,7 +39,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/entities.Cat"
+                                "$ref": "#/definitions/entities.FavoriteCat"
                             }
                         }
                     },
@@ -618,6 +618,23 @@ const docTemplate = `{
                 "user_id": {
                     "type": "integer",
                     "example": 44
+                }
+            }
+        },
+        "entities.FavoriteCat": {
+            "type": "object",
+            "properties": {
+                "breed": {
+                    "type": "string",
+                    "example": "Мейн-кун"
+                },
+                "id": {
+                    "type": "integer",
+                    "example": 7
+                },
+                "image_path": {
+                    "type": "string",
+                    "example": "/images/cat.png"
                 }
             }
         },

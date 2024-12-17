@@ -13,7 +13,7 @@ import (
 // @Description  Получение списка кошек, которые являются любимыми у пользователя по его идентификатору с логированием ошибок
 // @Accept       json
 // @Produce      json
-// @Success      200  {array}   entities.Cat "Успешное получение списка любимых кошек"
+// @Success      200  {array}   entities.FavoriteCat "Успешное получение списка любимых кошек"
 // @Failure      400  {object}  entities.ErrorResponse "Некорректный идентификатор пользователя"
 // @Failure      500  {object}  entities.ErrorResponse "Внутренняя ошибка сервера"
 // @Router       /auth/favorites [get]
