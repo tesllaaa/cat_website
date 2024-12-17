@@ -143,7 +143,7 @@ func (h *Handler) CatUpdate(c *fiber.Ctx) error {
 // @Success      200  {object}  map[string]string "Успешное удаление записи"
 // @Failure      400  {object}  entities.ErrorResponse "Некорректный идентификатор"
 // @Failure      500  {object}  entities.ErrorResponse "Внутренняя ошибка сервера"
-// @Router       /cat/{id} [delete]
+// @Router       /cat/id/{id} [delete]
 func (h *Handler) CatDelete(c *fiber.Ctx) error {
 	id, err := c.ParamsInt("id")
 	if err != nil {
