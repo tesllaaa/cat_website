@@ -43,10 +43,10 @@ func (h *Handler) CatCreate(c *fiber.Ctx) error {
 	path := "/.tmp"
 	savePath := filepath.Join(path, file.Filename)
 
-	if err := c.SaveFile(file, path); err != nil {
+	if err := c.SaveFile(file, savePath); err != nil {
 		logEvent := log.CreateLog(h.logger, log.LogsField{Level: "Error", Method: c.Method(),
 			Url: c.OriginalURL(), Status: fiber.StatusInternalServerError})
-		logEvent.Msg("failed to save file")
+		logEvent.Err(err).Msg("failed to save file")
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "failed to save file"})
 	}
 
