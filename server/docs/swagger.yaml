@@ -175,7 +175,6 @@ paths:
       summary: Создание записи о кошке
       tags:
       - cat
-  /cat/{id}:
     put:
       consumes:
       - application/json

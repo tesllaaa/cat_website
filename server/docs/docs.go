@@ -46,6 +46,60 @@ const docTemplate = `{
                     }
                 }
             },
+            "put": {
+                "description": "Обновление существующей записи о кошке в базе данных с логированием ошибок",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "cat"
+                ],
+                "summary": "Обновление записи о кошке",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID кошки",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Данные для обновления кошки",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/entities.UpdateCatRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Успешное обновление записи",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Некорректные данные",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Внутренняя ошибка сервера",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    }
+                }
+            },
             "post": {
                 "description": "Добавление новой записи о кошке в базу данных с логированием ошибок",
                 "consumes": [
@@ -193,62 +247,6 @@ const docTemplate = `{
                     },
                     "400": {
                         "description": "Некорректный идентификатор",
-                        "schema": {
-                            "$ref": "#/definitions/entities.ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Внутренняя ошибка сервера",
-                        "schema": {
-                            "$ref": "#/definitions/entities.ErrorResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/cat/{id}": {
-            "put": {
-                "description": "Обновление существующей записи о кошке в базе данных с логированием ошибок",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "cat"
-                ],
-                "summary": "Обновление записи о кошке",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "ID кошки",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "description": "Данные для обновления кошки",
-                        "name": "body",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/entities.UpdateCatRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Успешное обновление записи",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Некорректные данные",
                         "schema": {
                             "$ref": "#/definitions/entities.ErrorResponse"
                         }
