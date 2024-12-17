@@ -181,11 +181,6 @@ paths:
       description: Обновление существующей записи о кошке в базе данных с логированием
         ошибок
       parameters:
-      - description: ID кошки
-        in: path
-        name: id
-        required: true
-        type: integer
       - description: Данные для обновления кошки
         in: body
         name: body

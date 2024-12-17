@@ -102,7 +102,6 @@ func (h *Handler) CatCreate(c *fiber.Ctx) error {
 // @Description  Обновление существующей записи о кошке в базе данных с логированием ошибок
 // @Accept       json
 // @Produce      json
-// @Param        id             path     int                 true  "ID кошки"
 // @Param        body           body     entities.UpdateCatRequest true "Данные для обновления кошки"
 // @Success      200 {object}   map[string]string "Успешное обновление записи"
 // @Failure      400 {object}   entities.ErrorResponse "Некорректные данные"

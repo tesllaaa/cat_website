@@ -24,3 +24,9 @@ type UpdateCatRequest struct {
 	Temper         string `json:"temper" db:"temper" example:"Спокойный"`
 	CareComplexity int    `json:"care_complexity" db:"care_complexity" example:"4"`
 }
+
+type FavoriteCat struct {
+	Breed     string `json:"breed" db:"breed" example:"Мейн-кун"`
+	ID        int    `json:"id" db:"id" example:"7"`
+	ImagePath string `json:"image_path" db:"image_path" example:"/images/cat.png"`
+}

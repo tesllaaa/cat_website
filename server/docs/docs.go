@@ -60,13 +60,6 @@ const docTemplate = `{
                 "summary": "Обновление записи о кошке",
                 "parameters": [
                     {
-                        "type": "integer",
-                        "description": "ID кошки",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
                         "description": "Данные для обновления кошки",
                         "name": "body",
                         "in": "body",
