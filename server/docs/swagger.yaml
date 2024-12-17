@@ -50,6 +50,18 @@ definitions:
       error:
         type: string
     type: object
+  entities.Favorite:
+    properties:
+      cat_id:
+        example: 3
+        type: integer
+      id:
+        example: 5
+        type: integer
+      user_id:
+        example: 44
+        type: integer
+    type: object
   entities.LoginUserRequest:
     properties:
       email:
@@ -86,6 +98,15 @@ definitions:
         example: Спокойный
         type: string
     type: object
+  entities.UpdateFavoriteRequest:
+    properties:
+      cat_id:
+        example: 3
+        type: integer
+      user_id:
+        example: 5
+        type: integer
+    type: object
   entities.UserData:
     properties:
       email:
@@ -106,6 +127,106 @@ info:
   title: Kotiki API
   version: "1.0"
 paths:
+  /auth/favorites:
+    delete:
+      consumes:
+      - application/json
+      description: Удаление кошки из списка любимых пользователя по его идентификатору
+        и идентификатору кошки с логированием ошибок
+      parameters:
+      - description: Информация о кошке и пользователе
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/entities.UpdateFavoriteRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Успешное удаление кошки из списка любимых
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Некорректные данные запроса
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Удаление кошки из списка любимых
+      tags:
+      - cat
+    get:
+      consumes:
+      - application/json
+      description: Получение списка кошек, которые являются любимыми у пользователя
+        по его идентификатору с логированием ошибок
+      parameters:
+      - description: ID пользователя
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Успешное получение списка любимых кошек
+          schema:
+            items:
+              $ref: '#/definitions/entities.Cat'
+            type: array
+        "400":
+          description: Некорректный идентификатор пользователя
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Получение списка любимых кошек пользователя
+      tags:
+      - cat
+    post:
+      consumes:
+      - application/json
+      description: Добавление кошки в список любимых пользователя по его идентификатору
+        и идентификатору кошки с логированием ошибок
+      parameters:
+      - description: Информация о кошке и пользователе
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/entities.UpdateFavoriteRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Успешное добавление кошки в список любимых
+          schema:
+            $ref: '#/definitions/entities.Favorite'
+        "400":
+          description: Некорректные данные запроса
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Добавление кошки в список любимых
+      tags:
+      - cat
   /cat:
     get:
       consumes:

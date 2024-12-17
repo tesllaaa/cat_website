@@ -7,6 +7,159 @@
     },
     "basePath": "/api",
     "paths": {
+        "/auth/favorites": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Получение списка кошек, которые являются любимыми у пользователя по его идентификатору с логированием ошибок",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "cat"
+                ],
+                "summary": "Получение списка любимых кошек пользователя",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID пользователя",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Успешное получение списка любимых кошек",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/entities.Cat"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Некорректный идентификатор пользователя",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Внутренняя ошибка сервера",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Добавление кошки в список любимых пользователя по его идентификатору и идентификатору кошки с логированием ошибок",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "cat"
+                ],
+                "summary": "Добавление кошки в список любимых",
+                "parameters": [
+                    {
+                        "description": "Информация о кошке и пользователе",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/entities.UpdateFavoriteRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Успешное добавление кошки в список любимых",
+                        "schema": {
+                            "$ref": "#/definitions/entities.Favorite"
+                        }
+                    },
+                    "400": {
+                        "description": "Некорректные данные запроса",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Внутренняя ошибка сервера",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Удаление кошки из списка любимых пользователя по его идентификатору и идентификатору кошки с логированием ошибок",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "cat"
+                ],
+                "summary": "Удаление кошки из списка любимых",
+                "parameters": [
+                    {
+                        "description": "Информация о кошке и пользователе",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/entities.UpdateFavoriteRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Успешное удаление кошки из списка любимых",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Некорректные данные запроса",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Внутренняя ошибка сервера",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/cat": {
             "get": {
                 "description": "Получение всех записей о кошках из базы данных с логированием ошибок",
@@ -454,6 +607,23 @@
                 }
             }
         },
+        "entities.Favorite": {
+            "type": "object",
+            "properties": {
+                "cat_id": {
+                    "type": "integer",
+                    "example": 3
+                },
+                "id": {
+                    "type": "integer",
+                    "example": 5
+                },
+                "user_id": {
+                    "type": "integer",
+                    "example": 44
+                }
+            }
+        },
         "entities.LoginUserRequest": {
             "type": "object",
             "properties": {
@@ -502,6 +672,19 @@
                 "temper": {
                     "type": "string",
                     "example": "Спокойный"
+                }
+            }
+        },
+        "entities.UpdateFavoriteRequest": {
+            "type": "object",
+            "properties": {
+                "cat_id": {
+                    "type": "integer",
+                    "example": 3
+                },
+                "user_id": {
+                    "type": "integer",
+                    "example": 5
                 }
             }
         },
