@@ -18,6 +18,8 @@ const (
 		furname VARCHAR NOT NULL,
 		temper VARCHAR NOT NULL,
 		care_complexity INTEGER NOT NULL,
+		image_path VARCHAR NOT NULL
+);
 `
 
 	createFavoritesTable = `
@@ -25,6 +27,6 @@ const (
 		    id SERIAL PRIMARY KEY,
 		    user_id INTEGER references users(id) ON DELETE CASCADE,
 		    cat_id INTEGER references cats(id) ON DELETE CASCADE
-		)
+);
 `
 )
