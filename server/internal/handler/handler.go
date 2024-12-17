@@ -64,8 +64,8 @@ func (h *Handler) Router() *fiber.App {
 	})
 
 	authGroup.Get("/favorites", h.GetFavoriteCats)
-	authGroup.Post("/favorites", h.AddFavoriteCat)
-	authGroup.Delete("/favorites", h.DeleteFavoriteCat)
+	authGroup.Post("/favorites/id/:id", h.AddFavoriteCat)
+	authGroup.Delete("/favorites/id/:id", h.DeleteFavoriteCat)
 
 	return f
 }

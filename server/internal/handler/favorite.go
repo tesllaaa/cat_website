@@ -45,11 +45,11 @@ func (h *Handler) GetFavoriteCats(c *fiber.Ctx) error {
 // @Description  Добавление кошки в список любимых пользователя по его идентификатору и идентификатору кошки с логированием ошибок
 // @Accept       json
 // @Produce      json
-// @Param        body  body      entities.UpdateFavoriteRequest  true  "Информация о кошке и пользователе"
+// @Param        id   path      int  true  "ID кошки для добавления в список любимых"
 // @Success      200   {object}  entities.Favorite "Успешное добавление кошки в список любимых"
 // @Failure      400   {object}  entities.ErrorResponse "Некорректные данные запроса"
 // @Failure      500   {object}  entities.ErrorResponse "Внутренняя ошибка сервера"
-// @Router       /auth/favorites [post]
+// @Router       /auth/favorites/id/{id} [post]
 // @Security ApiKeyAuth
 func (h *Handler) AddFavoriteCat(c *fiber.Ctx) error {
 	id, ok := c.Locals("id").(int)
@@ -57,17 +57,14 @@ func (h *Handler) AddFavoriteCat(c *fiber.Ctx) error {
 		return c.SendStatus(fiber.StatusForbidden)
 	}
 
-	var req entities.UpdateFavoriteRequest
-	if err := c.BodyParser(&req); err != nil {
-		logEvent := log.CreateLog(h.logger, log.LogsField{Level: "Error", Method: c.Method(),
-			Url: c.OriginalURL(), Status: fiber.StatusInternalServerError})
-		logEvent.Msg(err.Error())
+	catID, err := c.ParamsInt("id")
+	if err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
 	}
 
 	favorite := &entities.Favorite{
 		UserID: id,
-		CatID:  req.CatID,
+		CatID:  catID,
 	}
 	h.logger.Debug().Msg("call postgres.AddFavoriteCat")
 	res, err := postgres.DBAddFavoriteCat(h.db, favorite)
@@ -89,11 +86,11 @@ func (h *Handler) AddFavoriteCat(c *fiber.Ctx) error {
 // @Description  Удаление кошки из списка любимых пользователя по его идентификатору и идентификатору кошки с логированием ошибок
 // @Accept       json
 // @Produce      json
-// @Param        body  body      entities.UpdateFavoriteRequest  true  "Информация о кошке и пользователе"
+// @Param        id   path      int  true  "ID кошки для удаления из списка любимых"
 // @Success      200   {object}  map[string]string "Успешное удаление кошки из списка любимых"
 // @Failure      400   {object}  entities.ErrorResponse "Некорректные данные запроса"
 // @Failure      500   {object}  entities.ErrorResponse "Внутренняя ошибка сервера"
-// @Router       /auth/favorites [delete]
+// @Router       /auth/favorites/id/{id} [delete]
 // @Security ApiKeyAuth
 func (h *Handler) DeleteFavoriteCat(c *fiber.Ctx) error {
 	id, ok := c.Locals("id").(int)
@@ -101,20 +98,17 @@ func (h *Handler) DeleteFavoriteCat(c *fiber.Ctx) error {
 		return c.SendStatus(fiber.StatusForbidden)
 	}
 
-	var req entities.UpdateFavoriteRequest
-	if err := c.BodyParser(&req); err != nil {
-		logEvent := log.CreateLog(h.logger, log.LogsField{Level: "Error", Method: c.Method(),
-			Url: c.OriginalURL(), Status: fiber.StatusInternalServerError})
-		logEvent.Msg(err.Error())
+	catID, err := c.ParamsInt("id")
+	if err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
 	}
 
 	favorite := &entities.Favorite{
 		UserID: id,
-		CatID:  req.CatID,
+		CatID:  catID,
 	}
 	h.logger.Debug().Msg("call postgres.DBRemoveFavoriteCat")
-	err := postgres.DBRemoveFavoriteCat(h.db, favorite)
+	err = postgres.DBRemoveFavoriteCat(h.db, favorite)
 	if err != nil {
 		logEvent := log.CreateLog(h.logger, log.LogsField{Level: "Error", Method: c.Method(),
 			Url: c.OriginalURL(), Status: fiber.StatusInternalServerError})

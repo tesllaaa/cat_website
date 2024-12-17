@@ -98,12 +98,6 @@ definitions:
         example: Спокойный
         type: string
     type: object
-  entities.UpdateFavoriteRequest:
-    properties:
-      cat_id:
-        example: 3
-        type: integer
-    type: object
   entities.UserData:
     properties:
       email:
@@ -125,40 +119,6 @@ info:
   version: "1.0"
 paths:
   /auth/favorites:
-    delete:
-      consumes:
-      - application/json
-      description: Удаление кошки из списка любимых пользователя по его идентификатору
-        и идентификатору кошки с логированием ошибок
-      parameters:
-      - description: Информация о кошке и пользователе
-        in: body
-        name: body
-        required: true
-        schema:
-          $ref: '#/definitions/entities.UpdateFavoriteRequest'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Успешное удаление кошки из списка любимых
-          schema:
-            additionalProperties:
-              type: string
-            type: object
-        "400":
-          description: Некорректные данные запроса
-          schema:
-            $ref: '#/definitions/entities.ErrorResponse'
-        "500":
-          description: Внутренняя ошибка сервера
-          schema:
-            $ref: '#/definitions/entities.ErrorResponse'
-      security:
-      - ApiKeyAuth: []
-      summary: Удаление кошки из списка любимых
-      tags:
-      - cat
     get:
       consumes:
       - application/json
@@ -186,18 +146,51 @@ paths:
       summary: Получение списка любимых кошек пользователя
       tags:
       - cat
+  /auth/favorites/id/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Удаление кошки из списка любимых пользователя по его идентификатору
+        и идентификатору кошки с логированием ошибок
+      parameters:
+      - description: ID кошки для удаления из списка любимых
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Успешное удаление кошки из списка любимых
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Некорректные данные запроса
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Удаление кошки из списка любимых
+      tags:
+      - cat
     post:
       consumes:
       - application/json
       description: Добавление кошки в список любимых пользователя по его идентификатору
         и идентификатору кошки с логированием ошибок
       parameters:
-      - description: Информация о кошке и пользователе
-        in: body
-        name: body
+      - description: ID кошки для добавления в список любимых
+        in: path
+        name: id
         required: true
-        schema:
-          $ref: '#/definitions/entities.UpdateFavoriteRequest'
+        type: integer
       produces:
       - application/json
       responses:

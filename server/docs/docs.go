@@ -56,7 +56,9 @@ const docTemplate = `{
                         }
                     }
                 }
-            },
+            }
+        },
+        "/auth/favorites/id/{id}": {
             "post": {
                 "security": [
                     {
@@ -76,13 +78,11 @@ const docTemplate = `{
                 "summary": "Добавление кошки в список любимых",
                 "parameters": [
                     {
-                        "description": "Информация о кошке и пользователе",
-                        "name": "body",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/entities.UpdateFavoriteRequest"
-                        }
+                        "type": "integer",
+                        "description": "ID кошки для добавления в список любимых",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -125,13 +125,11 @@ const docTemplate = `{
                 "summary": "Удаление кошки из списка любимых",
                 "parameters": [
                     {
-                        "description": "Информация о кошке и пользователе",
-                        "name": "body",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/entities.UpdateFavoriteRequest"
-                        }
+                        "type": "integer",
+                        "description": "ID кошки для удаления из списка любимых",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -671,15 +669,6 @@ const docTemplate = `{
                 "temper": {
                     "type": "string",
                     "example": "Спокойный"
-                }
-            }
-        },
-        "entities.UpdateFavoriteRequest": {
-            "type": "object",
-            "properties": {
-                "cat_id": {
-                    "type": "integer",
-                    "example": 3
                 }
             }
         },
