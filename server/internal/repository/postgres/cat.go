@@ -9,7 +9,7 @@ import (
 
 func DBCatCreate(db *sqlx.DB, cat *entities.Cat) (*entities.Cat, error) {
 	query := `
-		INSERT INTO cat (breed, fur, temper, care_complexity, image_path)
+		INSERT INTO cats (breed, fur, temper, care_complexity, image_path)
 		VALUES (:breed, :fur, :temper, :care_complexity, :image_path)
 	`
 
