@@ -12,18 +12,18 @@ type User struct {
 
 // UserData базовая структура пользовательских данных
 type UserData struct {
-	ID        int    `json:"id" db:"id" example:"1"`
-	Email     string `json:"email" db:"email" example:"petrov@mail.ru"`
-	Name      string `json:"name" db:"name" example:"Петр"`
-	Surname   string `json:"surname" db:"surname" example:"Петров"`
-	ThirdName string `json:"third_name" db:"third_name" example:"Петрович"`
+	ID      int    `json:"id" db:"id" example:"1"`
+	Email   string `json:"email" db:"email" example:"petrov@mail.ru"`
+	Name    string `json:"name" db:"name" example:"Петр"`
+	Surname string `json:"surname" db:"surname" example:"Петров"`
 }
 
 // CreateUserRequest структура запроса на создание пользователя
 type CreateUserRequest struct {
 	Password string `json:"password" example:"12345678"`
 	Email    string `json:"email" example:"petrov@mail.ru"`
-	FullName string `json:"full_name" example:"Петров Петр Иванович"`
+	Name     string `json:"name" db:"name" example:"Петр"`
+	Surname  string `json:"surname" db:"surname" example:"Петров"`
 }
 
 // CreateUserResponse структура ответа на создание пользователя

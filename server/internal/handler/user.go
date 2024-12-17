@@ -9,7 +9,6 @@ import (
 	"server/pkg"
 	"server/util"
 	"strconv"
-	"strings"
 )
 
 // SignUp
@@ -55,20 +54,11 @@ func (h *Handler) SignUp(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
 	}
 
-	fullname := strings.Split(u.FullName, " ")
-	if len(fullname) < 3 {
-		logEvent := log.CreateLog(h.logger, log.LogsField{Level: "Error", Method: c.Method(),
-			Url: c.OriginalURL(), Status: fiber.StatusInternalServerError})
-		logEvent.Msg(err.Error())
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
-	}
-
 	user := &entities.User{
-		Email:     u.Email,
-		Password:  hashedPassword,
-		Name:      fullname[1],
-		Surname:   fullname[0],
-		ThirdName: fullname[2],
+		Email:    u.Email,
+		Password: hashedPassword,
+		Name:     u.Name,
+		Surname:  u.Surname,
 	}
 
 	h.logger.Debug().Msg("call postgres.DBUserCreate")
@@ -117,7 +107,7 @@ func (h *Handler) SignUp(c *fiber.Ctx) error {
 // @Description  Аутентификация пользователя с возвращением токена доступа
 // @Accept       json
 // @Produce      json
-// @Param        data body entities.LoginUserRequest true "Данные пользоватея"
+// @Param        data body entities.LoginUserRequest true "Данные для входа"
 // @Success      200 {object} entities.LoginUserResponse "Успешный вход"
 // @Failure      400 {object} entities.ErrorResponse "Неверный логин или пароль"
 // @Failure      500 {object} entities.ErrorResponse "Внутренняя ошибка сервера"

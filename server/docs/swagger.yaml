@@ -5,11 +5,14 @@ definitions:
       email:
         example: petrov@mail.ru
         type: string
-      full_name:
-        example: Петров Петр Иванович
+      name:
+        example: Петр
         type: string
       password:
         example: "12345678"
+        type: string
+      surname:
+        example: Петров
         type: string
     type: object
   entities.CreateUserResponse:
@@ -58,9 +61,6 @@ definitions:
       surname:
         example: Петров
         type: string
-      third_name:
-        example: Петрович
-        type: string
     type: object
 info:
   contact: {}
@@ -73,7 +73,7 @@ paths:
       - application/json
       description: Аутентификация пользователя с возвращением токена доступа
       parameters:
-      - description: Данные пользоватея
+      - description: Данные для входа
         in: body
         name: data
         required: true

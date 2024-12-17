@@ -30,7 +30,7 @@ const docTemplate = `{
                 "summary": "Вход пользователя",
                 "parameters": [
                     {
-                        "description": "Данные пользоватея",
+                        "description": "Данные для входа",
                         "name": "data",
                         "in": "body",
                         "required": true,
@@ -160,13 +160,17 @@ const docTemplate = `{
                     "type": "string",
                     "example": "petrov@mail.ru"
                 },
-                "full_name": {
+                "name": {
                     "type": "string",
-                    "example": "Петров Петр Иванович"
+                    "example": "Петр"
                 },
                 "password": {
                     "type": "string",
                     "example": "12345678"
+                },
+                "surname": {
+                    "type": "string",
+                    "example": "Петров"
                 }
             }
         },
@@ -235,10 +239,6 @@ const docTemplate = `{
                 "surname": {
                     "type": "string",
                     "example": "Петров"
-                },
-                "third_name": {
-                    "type": "string",
-                    "example": "Петрович"
                 }
             }
         }
