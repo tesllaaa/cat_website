@@ -159,6 +159,51 @@ const docTemplate = `{
                         }
                     }
                 }
+            },
+            "delete": {
+                "description": "Удаление записи о кошке из базы данных по её идентификатору с логированием ошибок",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "cat"
+                ],
+                "summary": "Удаление записи о кошке",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID кошки для удаления",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Успешное удаление записи",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Некорректный идентификатор",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Внутренняя ошибка сервера",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    }
+                }
             }
         },
         "/cat/{id}": {
@@ -204,51 +249,6 @@ const docTemplate = `{
                     },
                     "400": {
                         "description": "Некорректные данные",
-                        "schema": {
-                            "$ref": "#/definitions/entities.ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Внутренняя ошибка сервера",
-                        "schema": {
-                            "$ref": "#/definitions/entities.ErrorResponse"
-                        }
-                    }
-                }
-            },
-            "delete": {
-                "description": "Удаление записи о кошке из базы данных по её идентификатору с логированием ошибок",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "cat"
-                ],
-                "summary": "Удаление записи о кошке",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "ID кошки для удаления",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Успешное удаление записи",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Некорректный идентификатор",
                         "schema": {
                             "$ref": "#/definitions/entities.ErrorResponse"
                         }

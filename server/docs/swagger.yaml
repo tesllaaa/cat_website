@@ -176,37 +176,6 @@ paths:
       tags:
       - cat
   /cat/{id}:
-    delete:
-      consumes:
-      - application/json
-      description: Удаление записи о кошке из базы данных по её идентификатору с логированием
-        ошибок
-      parameters:
-      - description: ID кошки для удаления
-        in: path
-        name: id
-        required: true
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Успешное удаление записи
-          schema:
-            additionalProperties:
-              type: string
-            type: object
-        "400":
-          description: Некорректный идентификатор
-          schema:
-            $ref: '#/definitions/entities.ErrorResponse'
-        "500":
-          description: Внутренняя ошибка сервера
-          schema:
-            $ref: '#/definitions/entities.ErrorResponse'
-      summary: Удаление записи о кошке
-      tags:
-      - cat
     put:
       consumes:
       - application/json
@@ -245,6 +214,37 @@ paths:
       tags:
       - cat
   /cat/id/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Удаление записи о кошке из базы данных по её идентификатору с логированием
+        ошибок
+      parameters:
+      - description: ID кошки для удаления
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Успешное удаление записи
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Некорректный идентификатор
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      summary: Удаление записи о кошке
+      tags:
+      - cat
     get:
       consumes:
       - application/json
