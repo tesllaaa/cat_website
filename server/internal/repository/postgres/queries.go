@@ -15,7 +15,7 @@ const (
 		CREATE TABLE IF NOT EXISTS cats (
 		id SERIAL PRIMARY KEY,
 		breed VARCHAR NOT NULL,
-		furname VARCHAR NOT NULL,
+		fur VARCHAR NOT NULL,
 		temper VARCHAR NOT NULL,
 		care_complexity INTEGER NOT NULL,
 		image_path VARCHAR NOT NULL
