@@ -30,13 +30,6 @@ const docTemplate = `{
                 "summary": "Создание записи о кошке",
                 "parameters": [
                     {
-                        "type": "integer",
-                        "description": "ID кошки",
-                        "name": "id",
-                        "in": "formData",
-                        "required": true
-                    },
-                    {
                         "type": "string",
                         "description": "Шерсть кошки",
                         "name": "fur",

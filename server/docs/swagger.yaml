@@ -94,11 +94,6 @@ paths:
       - multipart/form-data
       description: Добавление новой записи о кошке в базу данных с логированием ошибок
       parameters:
-      - description: ID кошки
-        in: formData
-        name: id
-        required: true
-        type: integer
       - description: Шерсть кошки
         in: formData
         name: fur
