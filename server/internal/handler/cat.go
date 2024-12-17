@@ -107,7 +107,7 @@ func (h *Handler) CatCreate(c *fiber.Ctx) error {
 // @Success      200 {object}   map[string]string "Успешное обновление записи"
 // @Failure      400 {object}   entities.ErrorResponse "Некорректные данные"
 // @Failure      500 {object}   entities.ErrorResponse "Внутренняя ошибка сервера"
-// @Router       /cat/{id} [put]
+// @Router       /cat [put]
 func (h *Handler) CatUpdate(c *fiber.Ctx) error {
 	var cat entities.UpdateCatRequest
 	err := c.BodyParser(&cat)
