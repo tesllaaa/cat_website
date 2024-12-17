@@ -25,7 +25,7 @@ func DBGetFavoriteCats(db *sqlx.DB, userID int) (*[]entities.FavoriteCat, error)
 
 func DBFavoriteExists(db *sqlx.DB, favorite *entities.Favorite) (bool, error) {
 	exists := 0
-	query := `SELECT 1 FROM favorite WHERE user_id = $1 AND cat_id = $2 LIMIT 1`
+	query := `SELECT 1 FROM favorites WHERE user_id = $1 AND cat_id = $2 LIMIT 1`
 
 	err := db.QueryRow(query, favorite.UserID, favorite.CatID).Scan(&exists)
 	if err != nil && !errors.Is(err, sql.ErrNoRows) {
