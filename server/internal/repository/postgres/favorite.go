@@ -29,7 +29,7 @@ func DBAddFavoriteCat(db *sqlx.DB, fav *entities.Favorite) (*entities.Favorite, 
 		return nil, err
 	}
 
-	err = stmt.Get(&fav.UserID, *fav)
+	err = stmt.Get(&fav.UserID, fav)
 	if err != nil {
 		return nil, err
 	}
