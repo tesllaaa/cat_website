@@ -78,8 +78,8 @@ func (h *Handler) AddFavoriteCat(c *fiber.Ctx) error {
 	if !exists {
 		logEvent := log.CreateLog(h.logger, log.LogsField{Level: "Error", Method: c.Method(),
 			Url: c.OriginalURL(), Status: fiber.StatusInternalServerError})
-		logEvent.Msg("cat not exists")
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "cat not exists"})
+		logEvent.Err(err).Msg("cat not exists")
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "cat do not exists"})
 	}
 
 	h.logger.Debug().Msg("call postgres.AddFavoriteCat")
@@ -130,8 +130,8 @@ func (h *Handler) DeleteFavoriteCat(c *fiber.Ctx) error {
 	if !exists {
 		logEvent := log.CreateLog(h.logger, log.LogsField{Level: "Error", Method: c.Method(),
 			Url: c.OriginalURL(), Status: fiber.StatusInternalServerError})
-		logEvent.Msg("cat not exists")
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "cat not exists"})
+		logEvent.Err(err).Msg("cat not exists")
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "cat do not exists"})
 	}
 
 	favorite := &entities.Favorite{

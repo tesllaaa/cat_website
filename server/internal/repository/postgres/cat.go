@@ -73,7 +73,7 @@ func DBCatDelete(db *sqlx.DB, catID int) error {
 
 func DBCatGetByID(db *sqlx.DB, catID int) (*entities.Cat, error) {
 	cat := entities.Cat{}
-	query := `select * from cats where id = $1
+	query := `SELECT * FROM cats WHERE id = $1
 	`
 
 	err := db.Get(&cat, query, catID)
