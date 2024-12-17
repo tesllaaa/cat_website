@@ -63,5 +63,9 @@ func (h *Handler) Router() *fiber.App {
 		return pkg.WithJWTAuth(c, config.SigningKey)
 	})
 
+	authGroup.Get("/favorites", h.GetFavoriteCats)
+	authGroup.Post("/favorites", h.AddFavoriteCat)
+	authGroup.Delete("/favorites", h.DeleteFavoriteCat)
+
 	return f
 }
