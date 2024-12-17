@@ -67,6 +67,21 @@ func (h *Handler) AddFavoriteCat(c *fiber.Ctx) error {
 		CatID:  catID,
 	}
 
+	h.logger.Debug().Msg("call postgres.DBFavoriteExists")
+	flag, err := postgres.DBFavoriteExists(h.db, favorite)
+	if err != nil {
+		logEvent := log.CreateLog(h.logger, log.LogsField{Level: "Error", Method: c.Method(),
+			Url: c.OriginalURL(), Status: fiber.StatusInternalServerError})
+		logEvent.Msg(err.Error())
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
+	}
+	if flag {
+		logEvent := log.CreateLog(h.logger, log.LogsField{Level: "Error", Method: c.Method(),
+			Url: c.OriginalURL(), Status: fiber.StatusInternalServerError})
+		logEvent.Msg("favorite already exists")
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "favorite already exists"})
+	}
+
 	h.logger.Debug().Msg("call postgres.DBCatExistsID")
 	exists, err := postgres.DBCatExistsID(h.db, catID)
 	if err != nil {
@@ -138,6 +153,22 @@ func (h *Handler) DeleteFavoriteCat(c *fiber.Ctx) error {
 		UserID: id,
 		CatID:  catID,
 	}
+
+	h.logger.Debug().Msg("call postgres.DBFavoriteExists")
+	flag, err := postgres.DBFavoriteExists(h.db, favorite)
+	if err != nil {
+		logEvent := log.CreateLog(h.logger, log.LogsField{Level: "Error", Method: c.Method(),
+			Url: c.OriginalURL(), Status: fiber.StatusInternalServerError})
+		logEvent.Msg(err.Error())
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
+	}
+	if !flag {
+		logEvent := log.CreateLog(h.logger, log.LogsField{Level: "Error", Method: c.Method(),
+			Url: c.OriginalURL(), Status: fiber.StatusInternalServerError})
+		logEvent.Msg("favorite already exists")
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "favorite not exists"})
+	}
+
 	h.logger.Debug().Msg("call postgres.DBRemoveFavoriteCat")
 	err = postgres.DBRemoveFavoriteCat(h.db, favorite)
 	if err != nil {

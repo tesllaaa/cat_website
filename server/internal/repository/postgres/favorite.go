@@ -1,6 +1,8 @@
 package postgres
 
 import (
+	"database/sql"
+	"errors"
 	"github.com/jmoiron/sqlx"
 	"server/internal/entities"
 )
@@ -21,15 +23,24 @@ func DBGetFavoriteCats(db *sqlx.DB, userID int) (*[]entities.FavoriteCat, error)
 
 }
 
-func DBAddFavoriteCat(db *sqlx.DB, fav *entities.Favorite) (*entities.Favorite, error) {
-	query := `INSERT INTO favorites (user_id, cat_id) VALUES (:user_id, :cat_id) RETURNING id;`
+func DBFavoriteExists(db *sqlx.DB, favorite *entities.Favorite) (bool, error) {
+	exists := 0
+	query := `SELECT 1 FROM favorite WHERE user_id = $1 AND cat_id = $2 LIMIT 1`
 
-	stmt, err := db.PrepareNamed(query)
-	if err != nil {
-		return nil, err
+	err := db.QueryRow(query, favorite.UserID, favorite.CatID).Scan(&exists)
+	if err != nil && !errors.Is(err, sql.ErrNoRows) {
+		return false, err
 	}
+	if exists == 1 {
+		return true, nil
+	}
+	return false, nil
+}
 
-	err = stmt.Get(&fav.UserID, fav)
+func DBAddFavoriteCat(db *sqlx.DB, fav *entities.Favorite) (*entities.Favorite, error) {
+	query := `INSERT INTO favorites (user_id, cat_id) VALUES ($1, $2) RETURNING id;`
+
+	err := db.QueryRow(query, fav.UserID, fav.CatID).Scan(&fav.ID)
 	if err != nil {
 		return nil, err
 	}
