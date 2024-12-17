@@ -66,6 +66,22 @@ func (h *Handler) AddFavoriteCat(c *fiber.Ctx) error {
 		UserID: id,
 		CatID:  catID,
 	}
+
+	h.logger.Debug().Msg("call postgres.DBCatExistsID")
+	exists, err := postgres.DBCatExistsID(h.db, id)
+	if err != nil {
+		logEvent := log.CreateLog(h.logger, log.LogsField{Level: "Error", Method: c.Method(),
+			Url: c.OriginalURL(), Status: fiber.StatusInternalServerError})
+		logEvent.Msg(err.Error())
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
+	}
+	if !exists {
+		logEvent := log.CreateLog(h.logger, log.LogsField{Level: "Error", Method: c.Method(),
+			Url: c.OriginalURL(), Status: fiber.StatusInternalServerError})
+		logEvent.Msg("cat not exists")
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "cat not exists"})
+	}
+
 	h.logger.Debug().Msg("call postgres.AddFavoriteCat")
 	res, err := postgres.DBAddFavoriteCat(h.db, favorite)
 	if err != nil {
@@ -103,6 +119,21 @@ func (h *Handler) DeleteFavoriteCat(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
 	}
 
+	h.logger.Debug().Msg("call postgres.DBCatExistsID")
+	exists, err := postgres.DBCatExistsID(h.db, id)
+	if err != nil {
+		logEvent := log.CreateLog(h.logger, log.LogsField{Level: "Error", Method: c.Method(),
+			Url: c.OriginalURL(), Status: fiber.StatusInternalServerError})
+		logEvent.Msg(err.Error())
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
+	}
+	if !exists {
+		logEvent := log.CreateLog(h.logger, log.LogsField{Level: "Error", Method: c.Method(),
+			Url: c.OriginalURL(), Status: fiber.StatusInternalServerError})
+		logEvent.Msg("cat not exists")
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "cat not exists"})
+	}
+
 	favorite := &entities.Favorite{
 		UserID: id,
 		CatID:  catID,
@@ -113,7 +144,7 @@ func (h *Handler) DeleteFavoriteCat(c *fiber.Ctx) error {
 		logEvent := log.CreateLog(h.logger, log.LogsField{Level: "Error", Method: c.Method(),
 			Url: c.OriginalURL(), Status: fiber.StatusInternalServerError})
 		logEvent.Msg(err.Error())
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
 	}
 	logEvent := log.CreateLog(h.logger, log.LogsField{Level: "Info", Method: c.Method(),
 		Url: c.OriginalURL(), Status: fiber.StatusOK})
