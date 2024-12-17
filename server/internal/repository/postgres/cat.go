@@ -62,9 +62,9 @@ func DBCatUpdate(db *sqlx.DB, cat *entities.UpdateCatRequest) error {
 	return nil
 }
 
-func DBCatDelete(db *sqlx.DB, cat *entities.Cat) error {
+func DBCatDelete(db *sqlx.DB, catID int) error {
 	query := `DELETE FROM cats WHERE id = $1`
-	_, err := db.Exec(query, cat.ID)
+	_, err := db.Exec(query, catID)
 	if err != nil {
 		return err
 	}
