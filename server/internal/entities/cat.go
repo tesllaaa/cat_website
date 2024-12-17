@@ -16,3 +16,11 @@ type CreateCatRequest struct {
 	CareComplexity int    `form:"care_complexity"`
 	Image          string `form:"image"`
 }
+
+type UpdateCatRequest struct {
+	ID             int    `json:"id" db:"id" example:"7"`
+	Breed          string `json:"breed" db:"breed" example:"Мейн-кун"`
+	Fur            string `json:"fur" db:"fur" example:"Длинношерстная"`
+	Temper         string `json:"temper" db:"temper" example:"Спокойный"`
+	CareComplexity int    `json:"care_complexity" db:"care_complexity" example:"4"`
+}

@@ -52,3 +52,43 @@ func DBCatExistsBreed(db *sqlx.DB, breed string) (bool, error) {
 	}
 	return false, nil
 }
+
+func DBCatUpdate(db *sqlx.DB, cat *entities.UpdateCatRequest) error {
+	query := `UPDATE cats SET breed = $1, fur = $2, temper = $3, care_complexity = $4 WHERE id = $5`
+	_, err := db.Exec(query, cat.Breed, cat.Fur, cat.Temper, cat.CareComplexity, cat.ID)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func DBCatDelete(db *sqlx.DB, cat *entities.Cat) error {
+	query := `DELETE FROM cats WHERE id = $1`
+	_, err := db.Exec(query, cat.ID)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func DBCatGetByID(db *sqlx.DB, catID int) (*entities.Cat, error) {
+	cat := entities.Cat{}
+	query := `select * from cats where id = $1
+	`
+
+	err := db.Get(&cat, query, catID)
+	if err != nil {
+		return nil, err
+	}
+	return &cat, nil
+}
+
+func DBCatGetAll(db *sqlx.DB) (*[]entities.Cat, error) {
+	var cats []entities.Cat
+	query := `SELECT * FROM cats ORDER BY id`
+	err := db.Select(&cats, query)
+	if err != nil {
+		return nil, err
+	}
+	return &cats, nil
+}
